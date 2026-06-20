@@ -29,3 +29,8 @@ runs:
           CONFIG_TMPFS_POSIX_ACL=y
           CONFIG_KALLSYMS=y
           CONFIG_KALLSYMS_ALL=y
+          CONFIG_ZRAM=y
+          CONFIG_ZRAM_DEF_COMP="zstd"
+          CONFIG_CRYPTO_ZSTD=y
+          CONFIG_ZSTD_COMPRESS=y
+          CONFIG_ZSTD_DECOMPRESS=y
