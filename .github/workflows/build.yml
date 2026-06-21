@@ -130,11 +130,10 @@ jobs:
         sublevel: ${{ steps.extract.outputs.sublevel }}
         os_patch_level: ${{ inputs.os_patch_level }}
 
-    - name: Setup KernelSU-Next
-      if: contains(inputs.feature_set, 'KSUN') || inputs.feature_set == 'FULL'
-      uses: ./.github/actions/kernelsu
+    - name: Setup SukiSU
+      uses: ./.github/actions/suksisu
       with:
-        use_latest_commits: ${{ inputs.use_latest_commits }}
+        ref: ''  # latest
 
     - name: SUSFS
       if: contains(inputs.feature_set, 'SUSFS') || inputs.feature_set == 'FULL'
