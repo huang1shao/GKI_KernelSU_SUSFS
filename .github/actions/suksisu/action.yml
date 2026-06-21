@@ -1,0 +1,38 @@
+name: 'Setup SukiSU via setup.sh'
+description: 'Clone SukiSU-Ultra and run setup.sh to inject into kernel'
+
+inputs:
+  ref:
+    description: 'Git ref (tag, branch, or commit SHA)'
+    required: false
+    default: ''
+
+runs:
+  using: "composite"
+  steps:
+    - name: Clone and setup SukiSU
+      shell: bash
+      working-directory: ${{ github.workspace }}/kernel
+      run: |
+        set -euo pipefail
+        git clone --depth=1 https://github.com/SukiSU-Ultra/SukiSU-Ultra.git
+        cd SukiSU-Ultra/kernel
+        REF="${{ inputs.ref }}"
+        if [ -n "$REF" ]; then
+          echo "Setting up SukiSU at ref: $REF"
+          ./setup.sh "$REF"
+        else
+          echo "Setting up SukiSU (latest)"
+          ./setup.sh
+        fi
+
+    - name: Verify SukiSU injection
+      shell: bash
+      working-directory: ${{ github.workspace }}/kernel
+      run: |
+        if [ -d "common/drivers/kernelsu" ]; then
+          echo "✅ SukiSU injected successfully"
+        else
+          echo "❌ SukiSU injection failed"
+          exit 1
+        fi
